@@ -19,7 +19,7 @@ public class Constants {
 
     public static final class ArmConstants {
         public static final int armTalonID = 14;
-    
+        public static final int armTalonID2 = 21;
         public static final String armTalonCANBus = "CAN0";
         public static final double armGearRatio = 25.64; // Sensor to Mechanism Ratio
 
