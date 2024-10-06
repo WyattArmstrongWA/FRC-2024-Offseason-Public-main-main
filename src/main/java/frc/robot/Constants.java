@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -18,8 +19,8 @@ public class Constants {
 
 
     public static final class ArmConstants {
-        public static final int armTalonID = 14;
-        public static final int armTalonID2 = 21;
+        public static final int armLeaderID = 14;
+        public static final int armFollowerID = 21;
         public static final String armTalonCANBus = "CAN0";
         public static final double armGearRatio = 25.64; // Sensor to Mechanism Ratio
 
@@ -62,7 +63,7 @@ public class Constants {
         .withReverseSoftLimitThreshold(armMinAngle.getRotations()));
 
         public static final MotionMagicExpoVoltage armPositionControl = new MotionMagicExpoVoltage(0, false, 0, 0, true, false, false);
-    
+        public static final Follower followerControl = new Follower(armLeaderID, true);
         public static final Rotation2d angleErrorTolerance = Rotation2d.fromDegrees(2.5); // Degrees
     }
 }

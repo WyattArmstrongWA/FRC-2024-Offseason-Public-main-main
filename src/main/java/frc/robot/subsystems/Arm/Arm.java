@@ -18,10 +18,11 @@ import frc.robot.subsystems.Util.TalonFXFactory;
 
 public class Arm extends SubsystemBase {
 
-  private TalonFX m_armMotor = TalonFXFactory.createTalon(ArmConstants.armTalonID, ArmConstants.armTalonCANBus, ArmConstants.kArmConfiguration);
-  private TalonFX m_armMotor2 = TalonFXFactory.createTalon(ArmConstants.armTalonID2, ArmConstants.armTalonCANBus, ArmConstants.kArmConfiguration);
+  private TalonFX m_armLeader = TalonFXFactory.createTalon(ArmConstants.armLeaderID, ArmConstants.armTalonCANBus, ArmConstants.kArmConfiguration);
+  private TalonFX m_armFollower = TalonFXFactory.createTalon(ArmConstants.armFollowerID, ArmConstants.armTalonCANBus, ArmConstants.kArmConfiguration);
   /** Creates a new Arm. */
   public Arm() {
+    m_armFollower.setControl(ArmConstants.followerControl);
   }
    /**
    * PID arm to position
@@ -29,8 +30,8 @@ public class Arm extends SubsystemBase {
    * @param rotations 0 to 1 rotations
    */
   private void setAngle(double position) {
-    m_armMotor.setControl(ArmConstants.armPositionControl.withPosition(position));
-    m_armMotor2.setControl(ArmConstants.armPositionControl.withPosition(position));
+    m_armLeader.setControl(ArmConstants.armPositionControl.withPosition(position));
+    m_armFollower.setControl(ArmConstants.followerControl);
   }
 
   /**
@@ -54,7 +55,7 @@ public class Arm extends SubsystemBase {
   }
 
   public Rotation2d getSetpointError() {
-    return Rotation2d.fromRotations(m_armMotor.getClosedLoopError().getValue());
+    return Rotation2d.fromRotations(m_armLeader.getClosedLoopError().getValue());
   }
 
   public boolean isAtSetpoint() {
@@ -62,19 +63,21 @@ public class Arm extends SubsystemBase {
   }
 
   public Rotation2d getAngle() {
-    return Rotation2d.fromRotations(m_armMotor.getPosition().getValue());
+    return Rotation2d.fromRotations(m_armLeader.getPosition().getValue());
   }
 
   public double getVoltageOut() {
-    return m_armMotor.getMotorVoltage().getValue();
+    return m_armLeader.getMotorVoltage().getValue();
   }
 
   public void stop() {
-    m_armMotor.setControl(new DutyCycleOut(0));
+    m_armLeader.setControl(new DutyCycleOut(0));
+    m_armFollower.setControl(new DutyCycleOut(0));
   }
 
   public void setarmVoltage(double volts) {
-    m_armMotor.setControl(new VoltageOut(volts));
+    m_armLeader.setControl(new VoltageOut(volts));
+    m_armFollower.setControl(ArmConstants.followerControl);
   }
 
   
